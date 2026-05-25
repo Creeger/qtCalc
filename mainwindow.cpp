@@ -5,12 +5,7 @@
 #include <QtDebug>
 #include <stack>
 #include <QLayout>
-#include <utility>
-#include <unordered_map>
 
-#include <iostream>
-
-// TODO: handle math consts and make tests for them
 
 bool equalsPressed = false;
 bool operatorPressed = false;
@@ -88,12 +83,6 @@ MainWindow::MainWindow(QWidget *parent)
     for (QPushButton *btn : hiddenButtons) {
         btn->setVisible(false);
     }
-
-    static const std::unordered_map<std::string, double> mathConsts = {
-        {"π", 3.141592653589793},
-        {"ε", 2.718281828459045},
-        {"τ", 6.283185307179586},
-    };
 
     ui->label->setText("0");
     ui->expressionLabel->setText("");
@@ -195,14 +184,20 @@ void MainWindow::equals_pressed() {
         return;
     }
 
-    std::string expression = ui->expressionLabel->text().toStdString();
+    QString expression = ui->expressionLabel->text();
+    
+    expression.replace("π", "pi");
+    expression.replace("ε", "eps");
+    expression.replace("τ", "tau");
 
-    if (!check_parentheses(expression)) {
+    std::string expr = expression.toStdString();
+
+    if (!check_parentheses(expr)) {
         return;
     }
 
     AngleMode mode = toAngleMode(ui->pushButton_radDeg->text());
-    std::vector<std::string> tokens = tokenize(expression);
+    std::vector<std::string> tokens = tokenize(expr);
     std::vector<std::string> rpn = shuntingYard(tokens);
     EvalResult result = computeRPN(rpn, mode);
 

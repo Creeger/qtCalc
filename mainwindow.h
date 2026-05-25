@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <string>
-#include <unordered_map>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,6 +38,5 @@ private:
     QList<QPushButton*> hiddenButtons;
     bool check_parentheses(const std::string& expression);
     void clearExpression();
-    std::unordered_map<std::string, double> mathConsts;
 };
 #endif // MAINWINDOW_H

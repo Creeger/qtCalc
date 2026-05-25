@@ -6,6 +6,13 @@
 #include <cmath>
 #include <algorithm>
 #include "compute.h"
+#include <iostream>
+
+std::unordered_map<std::string, double> mathConsts = {
+    {"pi", M_PI},
+    {"eps", std::numeric_limits<double>::epsilon()},
+    {"tau", M_PI*2},
+};
 
 
 EvalResult computeRPN(std::vector<std::string> rpnExpression, AngleMode mode) {
@@ -31,6 +38,7 @@ EvalResult computeRPN(std::vector<std::string> rpnExpression, AngleMode mode) {
     }
 
     for (const std::string& token : rpnExpression) {
+        std::cout << "Curr token: " << "[" << token << "]" << "\n";
         try {
             size_t idx;
             double num = std::stod(token, &idx);
@@ -42,10 +50,15 @@ EvalResult computeRPN(std::vector<std::string> rpnExpression, AngleMode mode) {
         } catch (...) {
         }
 
+        if (mathConsts.count(token)) {
+            stack.push(mathConsts[token]);
+            continue;
+        }
+
         //Check if token is a binary operator
         if (binOps.count(token)) {
             if (stack.size() < 2) {
-                return {false, "Invalid binary expression, 0.0"};
+                return {false, "Invalid binary expression", 0.0};
             }
 
             double b = stack.top(); stack.pop();
