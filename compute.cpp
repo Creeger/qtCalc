@@ -31,6 +31,8 @@ EvalResult computeRPN(std::vector<std::string> rpnExpression, AngleMode mode) {
         {"cos", [](double a) {return std::cos(a);}},
         {"tan", [](double a) {return std::tan(a);}},
         {"sqrt", [](double a) {return std::sqrt(a);}},
+        {"ln", [](double a) {return std::log(a); }},
+        {"log", [](double a) {return std::log10(a); }},
     };
 
     if (rpnExpression.empty()) {
@@ -38,7 +40,6 @@ EvalResult computeRPN(std::vector<std::string> rpnExpression, AngleMode mode) {
     }
 
     for (const std::string& token : rpnExpression) {
-        std::cout << "Curr token: " << "[" << token << "]" << "\n";
         try {
             size_t idx;
             double num = std::stod(token, &idx);
