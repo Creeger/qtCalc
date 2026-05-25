@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    qDebug() << "Constructor running";
 
     QObject::connect(ui->pushButton_clear, &QPushButton::clicked, this, &MainWindow::clear_pressed);
 
