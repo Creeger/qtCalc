@@ -11,7 +11,6 @@
 #include <iostream>
 
 // TODO: handle math consts and make tests for them
-// TODO: add project to github
 
 bool equalsPressed = false;
 bool operatorPressed = false;
@@ -52,14 +51,10 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->pushButton_equals, &QPushButton::clicked, this, &MainWindow::equals_pressed);
     QObject::connect(ui->pushButton_expand, &QPushButton::clicked, this, &MainWindow::expanded_pressed);
 
-    QObject::connect(ui->pushButton_opening, &QPushButton::clicked, this, &MainWindow::symbol_pressed);
-    QObject::connect(ui->pushButton_closing, &QPushButton::clicked, this, &MainWindow::symbol_pressed);
 
     QObject::connect(ui->pushButton_radDeg, &QPushButton::clicked, this, &MainWindow::radDeg_pressed);
+    ui->pushButton_radDeg->setVisible(false);
 
-    QObject::connect(ui->pushButton_pi, &QPushButton::clicked, this, &MainWindow::symbol_pressed);
-    QObject::connect(ui->pushButton_epsilon, &QPushButton::clicked, this, &MainWindow::symbol_pressed);
-    QObject::connect(ui->pushButton_tau, &QPushButton::clicked, this, &MainWindow::symbol_pressed);
 
     extraButtons = {
         ui->pushButton_sin,
@@ -72,9 +67,26 @@ MainWindow::MainWindow(QWidget *parent)
         ui->pushButton_sqrt,
     };
 
+    symbolButtons = {
+        ui->pushButton_opening,
+        ui->pushButton_closing,
+        ui->pushButton_pi,
+        ui->pushButton_epsilon,
+        ui->pushButton_tau,
+    };
+
+    hiddenButtons << extraButtons << symbolButtons << ui->pushButton_radDeg;
+
     for (QPushButton *btn : extraButtons) {
-        btn->setVisible(false);
         QObject::connect(btn, &QPushButton::clicked, this, &MainWindow::function_pressed);
+    }
+
+    for (QPushButton *btn : symbolButtons) {
+        QObject::connect(btn, &QPushButton::clicked, this, &MainWindow::symbol_pressed);
+    }
+
+    for (QPushButton *btn : hiddenButtons) {
+        btn->setVisible(false);
     }
 
     static const std::unordered_map<std::string, double> mathConsts = {
@@ -206,9 +218,10 @@ void MainWindow::equals_pressed() {
 }
 
 void MainWindow::expanded_pressed() {
-    bool visible = extraButtons.first()->isVisible();
+    bool visible = hiddenButtons.first()->isVisible();
 
-    for (auto *btn : MainWindow::extraButtons) {
+
+    for (auto *btn : MainWindow::hiddenButtons) {
         btn->setVisible(!visible);
     }
 

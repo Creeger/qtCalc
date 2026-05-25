@@ -35,6 +35,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QList<QPushButton*> extraButtons;
+    QList<QPushButton*> symbolButtons;
+    QList<QPushButton*> hiddenButtons;
     bool check_parentheses(const std::string& expression);
     void clearExpression();
     std::unordered_map<std::string, double> mathConsts;
