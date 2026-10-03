@@ -130,8 +130,8 @@ void MainWindow::decimal_pressed() {
     if (!expression.isEmpty() && !lastChar.isDigit()) {
         ui->label->setText("Error");
     } else {
-        ui->label->setText(ui->label->text() + ",");
-        ui->expressionLabel->setText(ui->expressionLabel->text() + ",");
+        ui->label->setText(ui->label->text() + ".");
+        ui->expressionLabel->setText(ui->expressionLabel->text() + ".");
     }
 }
 
